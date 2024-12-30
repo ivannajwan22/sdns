@@ -2,16 +2,12 @@ name: "Docker Package"
 
 on:
   push:
-    # Publish `master` as Docker `latest` image.
     branches:
       - master
-
-    # Publish `v1.2.3` tags as releases.
     tags:
       - v*
 
 env:
-  # Name image Docker
   IMAGE_NAME: sdns-test
 
 jobs:
@@ -25,13 +21,13 @@ jobs:
       - name: Determine version
         id: get_version
         run: |
-          if [[ "${{ github.ref }}" == refs/heads/master ]]; then
+          if [[ "${GITHUB_REF}" == "refs/heads/master" ]]; then
             echo "VERSION=latest" >> $GITHUB_ENV
-          elif [[ "${{ github.ref }}" == refs/tags/* ]]; then
-            VERSION=${{ github.ref#refs/tags/ }}
+          elif [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            VERSION="${GITHUB_REF#refs/tags/}"
             echo "VERSION=$VERSION" >> $GITHUB_ENV
           else
-            echo "Unsupported ref: ${{ github.ref }}"
+            echo "Unsupported ref: ${GITHUB_REF}"
             exit 1
           fi
 
