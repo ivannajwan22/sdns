@@ -9,7 +9,7 @@ RUN apk add --no-cache \
     musl-dev \
     upx \
     curl && \
-    # Mengunduh dan menginstal Go versi terbaru
+    # Download and install the latest version of Go
     curl -sSL https://golang.org/dl/go1.23.0.linux-amd64.tar.gz | tar -C /usr/local -xz && \
     ln -s /usr/local/go/bin/go /usr/bin/go && \
     mkdir -p /src
@@ -28,7 +28,7 @@ COPY . .
 ARG TARGETARCH
 
 # Build the sdns binary with static linking
-RUN CGO_ENABLED=0 GOARCH=$TARGETARCH go build -trimpath -ldflags="-s -w" -buildmode=pie -o /sdns && \
+RUN CGO_ENABLED=0 GOARCH=$TARGETARCH go build -trimpath -ldflags="-s -w" -o /sdns && \
     strip /sdns && \
     upx --ultra-brute /sdns
 
