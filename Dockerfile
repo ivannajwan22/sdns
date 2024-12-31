@@ -1,14 +1,17 @@
 # Stage 1: Build Stage using Alpine 3.19.4
 FROM alpine:3.19.4 AS builder
 
-# Install build dependencies
+# Install build dependencies, termasuk Go versi terbaru
 RUN apk add --no-cache \
     ca-certificates \
     gcc \
     git \
     musl-dev \
-    go \
-    upx && \
+    upx \
+    curl && \
+    # Mengunduh dan menginstal Go versi terbaru
+    curl -sSL https://golang.org/dl/go1.23.0.linux-amd64.tar.gz | tar -C /usr/local -xz && \
+    ln -s /usr/local/go/bin/go /usr/bin/go && \
     mkdir -p /src
 
 # Set working directory
